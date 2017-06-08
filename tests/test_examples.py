@@ -209,7 +209,9 @@ class TestScanDeps(unittest.TestCase):
 
         self.assertEquals([{
             "basename": "bar.cwl",
+            "nameroot": "bar",
             "class": "File",
+            "nameext": "cwl",
             "location": "file:///example/bar.cwl"
         },
             {
