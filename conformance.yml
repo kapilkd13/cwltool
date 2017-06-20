@@ -23,10 +23,10 @@ clone_folder: c:\projects\myproject
 clone_depth: 5                      # clone entire repository history if not defined
 
 environment:
-  matrix:
-    - VERSION: v1.0
+  VERSION: v1.0
+  VERSION: v1.1.0-dev1
 
-    - VERSION: v1.1.0-dev1
+  matrix:
 
     - PYTHON: "C:\\Python27"
       PYTHON_VERSION: "2.7.x" 
@@ -35,6 +35,7 @@ environment:
     - PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7.x" 
       PYTHON_ARCH: "64"
+
 
 
 # scripts that run after cloning repository
