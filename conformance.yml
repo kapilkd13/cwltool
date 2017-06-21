@@ -29,24 +29,24 @@ environment:
     - PYTHON: "C:\\Python27"
       PYTHON_VERSION: "2.7.x" 
       PYTHON_ARCH: "32"
-      VERSION: v1.0
+      VERSION: "v1.0"
 
 
     - PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7.x" 
       PYTHON_ARCH: "64"
-      VERSION: v1.0
+      VERSION: "v1.0"
 
 
     - PYTHON: "C:\\Python27"
       PYTHON_VERSION: "2.7.x" 
       PYTHON_ARCH: "32"
-      VERSION: v1.1.0-dev1
+      VERSION: "v1.1.0-dev1"
 
     - PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7.x" 
       PYTHON_ARCH: "64"
-      VERSION: v1.1.0-dev1
+      VERSION: "v1.1.0-dev1"
 
 # scripts that run after cloning repository
 install:
@@ -88,7 +88,9 @@ build_script:
 
 # scripts to run before tests
 before_test:
-  - echo script1
+  - "pip install cwltest"
+  - "git clone https://github.com/common-workflow-language/common-workflow-language.git"
+  - "cd c:\\projects\\myproject\\common-workflow-language\\%VERSION%"
   - ps: Write-Host "script1"
 
 # scripts to run after tests
@@ -96,8 +98,8 @@ after_test:
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  - "%CMD_IN_ENV% python setup.py test"
-
+# - "%CMD_IN_ENV% python setup.py test"
+  - " cwltest --test conformance_test_%VERSION%.yaml --tool cwltool"
 # to disable automatic tests
 #test: off
 
