@@ -54,6 +54,12 @@ install:
   - "python --version"
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
   - "pip install --disable-pip-version-check --user --upgrade pip"
+  # Get the latest stable version of Node.js or io.js
+  - ps: Install-Product node $env:nodejs_version
+  # install modules
+  - npm install
+  - node --version
+  - npm --version
 
 #---------------------------------#
 #       build configuration       #
@@ -91,7 +97,6 @@ before_test:
   - "pip install cwltest"
   - "git clone https://github.com/common-workflow-language/common-workflow-language.git"
   - "cd c:\\projects\\myproject\\common-workflow-language\\%VERSION%"
-  - ps: Write-Host "script1"
 
 # scripts to run after tests
 after_test:
