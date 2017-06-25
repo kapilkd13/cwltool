@@ -56,8 +56,6 @@ install:
   - "pip install --disable-pip-version-check --user --upgrade pip"
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
-  # install modules
-  - npm install
   - node --version
   - npm --version
 
