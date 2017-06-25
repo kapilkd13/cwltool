@@ -2,6 +2,7 @@ import os
 import shutil
 import tempfile
 import unittest
+import pytest
 
 import cwltool.expression as expr
 import cwltool.factory
@@ -39,6 +40,8 @@ class TestListing(unittest.TestCase):
     #     # Default behavior in 1.1 will be no expansion
     #     self.assertEquals(main([get_data('tests/wf/listing_v1_1.cwl'), get_data('tests/listing-job.yml')]), 1)
 
+@pytest.mark.skipif(os.name == 'nt',
+                    reason="InplaceUpdate uses symlinks,does not run on windows without admin privileges")
 class TestInplaceUpdate(unittest.TestCase):
 
     def test_updateval(self):
@@ -124,7 +127,7 @@ class TestInplaceUpdate(unittest.TestCase):
             shutil.rmtree(tmp)
             shutil.rmtree(out)
 
-    def test_updateval_inplace(self):
+    def test_updatedir_inplace(self):
         try:
             tmp = tempfile.mkdtemp()
             with open(os.path.join(tmp, "value"), "w") as f:

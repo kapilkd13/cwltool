@@ -1,0 +1,108 @@
+
+# version format
+version: .{build}-{branch}
+
+# Maximum number of concurrent jobs for the project
+max_jobs: 1
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+# Build worker image (VM template)
+image: Visual Studio 2015
+
+# scripts that are called at very beginning, before repo cloning
+init:
+  - git config --global core.autocrlf input
+
+# clone directory
+clone_folder: c:\projects\myproject
+
+# set clone depth
+clone_depth: 5                      # clone entire repository history if not defined
+
+environment:
+
+  matrix:
+
+    - PYTHON: "C:\\Python27"
+      PYTHON_VERSION: "2.7.x" 
+      PYTHON_ARCH: "32"
+      VERSION: "v1.0"
+
+
+    - PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7.x" 
+      PYTHON_ARCH: "64"
+      VERSION: "v1.0"
+
+
+    - PYTHON: "C:\\Python27"
+      PYTHON_VERSION: "2.7.x" 
+      PYTHON_ARCH: "32"
+      VERSION: "v1.1.0-dev1"
+
+    - PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7.x" 
+      PYTHON_ARCH: "64"
+      VERSION: "v1.1.0-dev1"
+
+# scripts that run after cloning repository
+install:
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - "python --version"
+  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
+  - "pip install --disable-pip-version-check --user --upgrade pip"
+  # Get the latest stable version of Node.js or io.js
+  - ps: Install-Product node $env:nodejs_version
+  - node --version
+  - npm --version
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+# build platform, i.e. x86, x64, Any CPU. This setting is optional.
+platform: Any CPU
+
+# to add several platforms to build matrix:
+#platform:
+#  - x86
+#  - Any CPU
+
+
+
+# scripts to run before build
+before_build:
+
+# scripts to run after build
+after_build:
+
+# to run your custom scripts instead of automatic MSBuild
+build_script:
+  - "%CMD_IN_ENV% python setup.py install"
+
+# to disable automatic builds
+#build: off
+
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+
+# scripts to run before tests
+before_test:
+  - "pip install cwltest"
+  - "git clone https://github.com/common-workflow-language/common-workflow-language.git"
+  - "cd c:\\projects\\myproject\\common-workflow-language\\%VERSION%"
+
+# scripts to run after tests
+after_test:
+
+# to run your custom scripts instead of automatic tests
+test_script:
+# - "%CMD_IN_ENV% python setup.py test"
+  - " cwltest --test conformance_test_%VERSION%.yaml --tool cwltool"
+# to disable automatic tests
+#test: off
+
